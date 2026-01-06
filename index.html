@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎰 كازينو العظمة - ألعاب ومراهنات</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://files.catbox.moe/7pcx7j.jpg">
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo"></div>
+            <div class="loader-text">🎰 كازينو العظمة</div>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <img src="https://files.catbox.moe/7pcx7j.jpg" alt="شعار العظمة">
+                <h1>🎰 كازينو العظمة</h1>
+                <p>منصة الألعاب والمراهنات الرسمية</p>
+            </div>
+            
+            <div class="login-form">
+                <h2>تسجيل الدخول</h2>
+                <div class="login-members-list" id="membersList">
+                    <!-- يتم تعبئته بالجافاسكريبت -->
+                </div>
+                <div class="login-password">
+                    <input type="password" id="passwordInput" placeholder="كلمة المرور" autocomplete="current-password">
+                    <button id="loginBtn">دخول</button>
+                </div>
+                <div class="login-guest">
+                    <button id="guestModeBtn">الدخول كزائر</button>
+                </div>
+                <div class="login-notice" id="loginNotice"></div>
+                <div class="login-back">
+                    <button id="backToMainBtn">العودة للموقع الرئيسي</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الهيكل الرئيسي للكازينو -->
+    <div class="casino-wrapper" id="casinoWrapper" style="display: none;">
+        <!-- شريط التنقل العلوي -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-logo">
+                    <img src="https://files.catbox.moe/7pcx7j.jpg" alt="شعار">
+                    <span>🎰 كازينو</span>
+                </div>
+            </div>
+            
+            <div class="nav-center">
+                <div class="daily-message">
+                    <i class="fas fa-coins"></i>
+                    <span id="dailyMessageText">مرحباً في كازينو العظمة!</span>
+                </div>
+            </div>
+            
+            <div class="nav-right">
+                <div class="points-display">
+                    <i class="fas fa-coins"></i>
+                    <span id="userPoints">0</span>
+                </div>
+                <div class="user-avatar-small" id="userAvatarSmall">
+                    <img src="https://files.catbox.moe/7pcx7j.jpg" alt="صورة المستخدم">
+                </div>
+            </div>
+        </nav>
+
+        <!-- القائمة الجانبية (تم إصلاح مشكلة العرض) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile-sidebar">
+                    <img src="https://files.catbox.moe/7pcx7j.jpg" alt="صورة المستخدم" id="sidebarUserAvatar">
+                    <div class="user-info-sidebar">
+                        <h3 id="sidebarUserName">زائر</h3>
+                        <p id="sidebarUserRank">رصيد: <span id="sidebarUserBalance">0</span> نقطة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="#" data-section="home" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="#" data-section="single-games"><i class="fas fa-gamepad"></i> الألعاب الفردية</a></li>
+                <li><a href="#" data-section="click-race"><i class="fas fa-mouse-pointer"></i> سباق النقرات</a></li>
+                <li><a href="#" data-section="leaderboard"><i class="fas fa-chart-line"></i> المتصدرين</a></li>
+                <li><a href="#" data-section="history"><i class="fas fa-history"></i> سجلي</a></li>
+                <li><a href="#" data-section="help"><i class="fas fa-question-circle"></i> المساعدة</a></li>
+                <li><a href="#" id="logoutBtnSidebar"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <div class="online-users">
+                    <h4><i class="fas fa-signal"></i> اللاعبون النشطون (<span id="onlineCountSidebar">0</span>)</h4>
+                    <div class="online-list" id="onlineListSidebar">
+                        <!-- يتم تعبئته بالجافاسكريبت -->
+                    </div>
+                </div>
+                
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-coins"></i>
+                        <span>إجمالي الرهانات: <strong id="totalBets">0</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>الألعاب اليوم: <strong id="todayGames">0</strong></span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content" id="mainContent">
+            <!-- الصفحة الرئيسية -->
+            <section class="content-section active" id="homeSection">
+                <div class="section-header">
+                    <h1><i class="fas fa-home"></i> الصفحة الرئيسية</h1>
+                </div>
+                
+                <div class="welcome-card casino-style">
+                    <div class="welcome-image">
+                        <img src="https://files.catbox.moe/7pcx7j.jpg" alt="كازينو العظمة">
+                        <div class="casino-glow"></div>
+                    </div>
+                    <div class="welcome-text">
+                        <h2>🎰 مرحباً في كازينو العظمة</h2>
+                        <p>أكبر منصة ألعاب ومراهنات عربية! تحدى أصدقائك واربح النقاط</p>
+                    </div>
+                </div>
+                
+                <div class="stats-cards casino-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-dice"></i>
+                        <div class="stat-info">
+                            <h3>جولات اليوم</h3>
+                            <span id="todayGamesCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-info">
+                            <h3>انتصاراتك</h3>
+                            <span id="userWinsCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-coins"></i>
+                        <div class="stat-info">
+                            <h3>أرباحك</h3>
+                            <span id="userProfitsCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-info">
+                            <h3>نسبة الفوز</h3>
+                            <span id="winRatePercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quick-actions casino-actions">
+                    <h3><i class="fas fa-bolt"></i> ابدأ اللعب الآن</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" data-game="darts">
+                            <i class="fas fa-bullseye"></i>
+                            <span>رمي السهام</span>
+                        </button>
+                        <button class="action-btn" data-game="number">
+                            <i class="fas fa-hashtag"></i>
+                            <span>مراهنة رقم</span>
+                        </button>
+                        <button class="action-btn" data-game="dice">
+                            <i class="fas fa-dice"></i>
+                            <span>لعبة النرد</span>
+                        </button>
+                        <button class="action-btn" data-section="click-race">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <span>سباق النقرات</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="recent-games">
+                    <h3><i class="fas fa-history"></i> آخر الجولات</h3>
+                    <div class="games-list" id="recentGamesList">
+                        <!-- يتم تعبئته بالجافاسكريبت -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- الألعاب الفردية -->
+            <section class="content-section" id="single-gamesSection">
+                <div class="section-header">
+                    <h1><i class="fas fa-gamepad"></i> الألعاب الفردية</h1>
+                    <div class="game-balance">
+                        <span>رصيدك: <strong id="gameBalance">0</strong> نقطة</span>
+                    </div>
+                </div>
+                
+                <div class="games-tabs">
+                    <button class="game-tab active" data-game="darts">
+                        <i class="fas fa-bullseye"></i>
+                        <span>رمي السهام</span>
+                    </button>
+                    <button class="game-tab" data-game="number">
+                        <i class="fas fa-hashtag"></i>
+                        <span>مراهنة رقم</span>
+                    </button>
+                    <button class="game-tab" data-game="dice">
+                        <i class="fas fa-dice"></i>
+                        <span>لعبة النرد</span>
+                    </button>
+                </div>
+                
+                <!-- لعبة رمي السهام المحسنة -->
+                <div class="game-container active" id="dartsGame">
+                    <div class="game-header">
+                        <h2><i class="fas fa-bullseye"></i> رمي السهام الاحترافية</h2>
+                        <p class="game-description">أصبت الدوائر الصغيرة بسرعة قبل أن تختفي!</p>
+                    </div>
+                    
+                    <div class="game-content">
+                        <div class="game-board" id="dartsBoard">
+                            <div class="darts-timer">
+                                <i class="fas fa-clock"></i>
+                                <strong id="dartsTimer">15</strong> ثانية
+                            </div>
+                            <div class="darts-target-area" id="dartsTargetArea">
+                                <!-- ستظهر الدوائر هنا -->
+                            </div>
+                            <div class="darts-score-display">
+                                <span>الهدف: <strong>1600</strong> نقطة</span>
+                                <span>النقاط: <strong id="dartsScoreDisplay">0</strong></span>
+                                <span>الأهداف أصابت: <strong id="dartsHits">0</strong></span>
+                            </div>
+                        </div>
+                        
+                        <div class="game-controls">
+                            <div class="bet-control">
+                                <label for="dartsBetAmount">المبلغ المراهن:</label>
+                                <div class="bet-amount-selector">
+                                    <button class="bet-amount-btn" data-amount="100">100</button>
+                                    <button class="bet-amount-btn" data-amount="500">500</button>
+                                    <button class="bet-amount-btn" data-amount="1000">1000</button>
+                                    <button class="bet-amount-btn" data-amount="5000">5000</button>
+                                    <input type="number" id="dartsBetAmount" placeholder="أدخل مبلغاً" min="100" max="50000" value="1000">
+                                </div>
+                            </div>
+                            
+                            <div class="game-info">
+                                <div class="info-item">
+                                    <span>الدوائر الذهبية:</span>
+                                    <strong id="smallCircles">150 نقطة</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>الدوائر الفضية:</span>
+                                    <strong id="mediumCircles">100 نقطة</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>الدوائر البرونزية:</span>
+                                    <strong id="largeCircles">50 نقطة</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="game-actions">
+                                <button class="btn btn-primary" id="dartsStartBtn">
+                                    <i class="fas fa-play"></i> بدء اللعب
+                                </button>
+                                <button class="btn btn-secondary" id="dartsResetBtn" disabled>
+                                    <i class="fas fa-redo"></i> إعادة تعيين
+                                </button>
+                            </div>
+                            
+                            <div class="game-rules">
+                                <h4><i class="fas fa-info-circle"></i> قواعد اللعبة:</h4>
+                                <ul>
+                                    <li>الوقت: 15 ثانية فقط</li>
+                                    <li>الهدف: جمع 1600+ نقطة للفوز</li>
+                                    <li>الدوائر الذهبية: 150 نقطة (تختفي بسرعة)</li>
+                                    <li>الدوائر الفضية: 100 نقطة</li>
+                                    <li>الدوائر البرونزية: 50 نقطة (تبقى أطول)</li>
+                                    <li>النقر على الفراغ: -10 نقاط</li>
+                                    <li>الفوز: 80% من الرهان</li>
+                                    <li>الخسارة: فقدان الرهان</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- لعبة مراهنة الرقم -->
+                <div class="game-container" id="numberGame">
+                    <div class="game-header">
+                        <h2><i class="fas fa-hashtag"></i> مراهنة على رقم</h2>
+                        <p class="game-description">اختر رقم وحاول تخمين الرقم العشوائي الصحيح</p>
+                    </div>
+                    
+                    <div class="game-content">
+                        <div class="number-grid" id="numberGrid">
+                            <!-- سيتم إنشاء الأرقام بالجافاسكريبت -->
+                        </div>
+                        
+                        <div class="game-controls">
+                            <div class="bet-control">
+                                <label for="numberBetAmount">المبلغ المراهن:</label>
+                                <div class="bet-amount-selector">
+                                    <button class="bet-amount-btn" data-amount="100">100</button>
+                                    <button class="bet-amount-btn" data-amount="500">500</button>
+                                    <button class="bet-amount-btn" data-amount="1000">1000</button>
+                                    <button class="bet-amount-btn" data-amount="5000">5000</button>
+                                    <input type="number" id="numberBetAmount" placeholder="أدخل مبلغاً" min="100" max="50000" value="1000">
+                                </div>
+                            </div>
+                            
+                            <div class="game-info">
+                                <div class="info-item">
+                                    <span>الرقم المختار:</span>
+                                    <strong id="selectedNumber">-</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>الرقم الفائز:</span>
+                                    <strong id="winningNumber">-</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>الربح المحتمل:</span>
+                                    <strong id="numberPotentialWin">800</strong> نقطة
+                                </div>
+                            </div>
+                            
+                            <div class="number-odds">
+                                <h4><i class="fas fa-chart-pie"></i> احتمالات الفوز:</h4>
+                                <div class="odds-list">
+                                    <div class="odds-item">
+                                        <span>اختيار رقم واحد:</span>
+                                        <span class="odds-value">1:10</span>
+                                        <span class="odds-payout">×8</span>
+                                    </div>
+                                    <div class="odds-item">
+                                        <span>اختيار رقمين:</span>
+                                        <span class="odds-value">1:5</span>
+                                        <span class="odds-payout">×4</span>
+                                    </div>
+                                    <div class="odds-item">
+                                        <span>اختيار 3 أرقام:</span>
+                                        <span class="odds-value">3:10</span>
+                                        <span class="odds-payout">×2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="game-actions">
+                                <button class="btn btn-secondary" id="numberResetBtn">
+                                    <i class="fas fa-redo"></i> إعادة
+                                </button>
+                                <button class="btn btn-primary" id="numberPlayBtn" disabled>
+                                    <i class="fas fa-play"></i> ابدأ المراهنة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- لعبة النرد -->
+                <div class="game-container" id="diceGame">
+                    <div class="game-header">
+                        <h2><i class="fas fa-dice"></i> لعبة النرد السريعة</h2>
+                        <p class="game-description">تحدي ضد الذكاء الاصطناعي - أعلى مجموع يفوز</p>
+                    </div>
+                    
+                    <div class="game-content">
+                        <div class="dice-arena">
+                            <div class="player-section">
+                                <h4>أنت</h4>
+                                <div class="dice-container" id="playerDice">
+                                    <div class="dice" data-value="1">⚀</div>
+                                    <div class="dice" data-value="2">⚁</div>
+                                </div>
+                                <div class="dice-total">
+                                    <span>المجموع:</span>
+                                    <strong id="playerTotal">0</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="vs-separator">
+                                <span>VS</span>
+                            </div>
+                            
+                            <div class="ai-section">
+                                <h4>الذكاء الاصطناعي</h4>
+                                <div class="dice-container" id="aiDice">
+                                    <div class="dice" data-value="1">⚀</div>
+                                    <div class="dice" data-value="2">⚁</div>
+                                </div>
+                                <div class="dice-total">
+                                    <span>المجموع:</span>
+                                    <strong id="aiTotal">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-controls">
+                            <div class="bet-control">
+                                <label for="diceBetAmount">المبلغ المراهن:</label>
+                                <div class="bet-amount-selector">
+                                    <button class="bet-amount-btn" data-amount="100">100</button>
+                                    <button class="bet-amount-btn" data-amount="500">500</button>
+                                    <button class="bet-amount-btn" data-amount="1000">1000</button>
+                                    <button class="bet-amount-btn" data-amount="5000">5000</button>
+                                    <input type="number" id="diceBetAmount" placeholder="أدخل مبلغاً" min="100" max="50000" value="1000">
+                                </div>
+                            </div>
+                            
+                            <div class="game-info">
+                                <div class="info-item">
+                                    <span>الجولة:</span>
+                                    <strong id="diceRound">1/3</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>النقاط:</span>
+                                    <strong id="dicePoints">0 - 0</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>الحالة:</span>
+                                    <strong id="diceStatus">في الانتظار</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="game-rules">
+                                <h4><i class="fas fa-info-circle"></i> قواعد اللعبة:</h4>
+                                <ul>
+                                    <li>3 جولات كل جولة ترمي نردين</li>
+                                    <li>أعلى مجموع في الجولة يفوز بنقطة</li>
+                                    <li>الفائز بأغلب الجولات يربح 80% من الرهان</li>
+                                    <li>التعادل = استرداد المبلغ</li>
+                                    <li>3-0 = ربح إضافي 20%</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="game-actions">
+                                <button class="btn btn-primary" id="diceStartBtn">
+                                    <i class="fas fa-play"></i> بدء اللعب
+                                </button>
+                                <button class="btn btn-secondary" id="diceResetBtn" disabled>
+                                    <i class="fas fa-redo"></i> جولة جديدة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- سباق النقرات المحسن -->
+            <section class="content-section" id="click-raceSection">
+                <div class="section-header">
+                    <h1><i class="fas fa-mouse-pointer"></i> سباق النقرات</h1>
+                    <button class="btn btn-primary" id="refreshRacesBtn">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                </div>
+                
+                <div class="click-race-container">
+                    <div class="race-create">
+                        <h3><i class="fas fa-plus-circle"></i> إنشاء تحدي جديد</h3>
+                        <div class="create-form">
+                            <div class="form-group">
+                                <label for="raceBetAmount">مبلغ الرهان:</label>
+                                <div class="bet-amount-selector">
+                                    <button class="bet-amount-btn" data-amount="100">100</button>
+                                    <button class="bet-amount-btn" data-amount="500">500</button>
+                                    <button class="bet-amount-btn" data-amount="1000">1000</button>
+                                    <button class="bet-amount-btn" data-amount="5000">5000</button>
+                                    <input type="number" id="raceBetAmount" placeholder="أدخل مبلغاً" min="100" max="50000" value="1000">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>مدة التحدي:</label>
+                                <div class="duration-info">
+                                    <span><i class="fas fa-clock"></i> 10 دقائق (مفتوح)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>وقت اللعب:</label>
+                                <div class="duration-info">
+                                    <span><i class="fas fa-stopwatch"></i> 20 ثانية لكل لاعب</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-primary" id="createRaceBtn">
+                                    <i class="fas fa-plus"></i> إنشاء تحدي
+                                </button>
+                                <button class="btn btn-secondary" id="soloPracticeBtn">
+                                    <i class="fas fa-user"></i> تدريب فردي
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="active-races">
+                        <h3><i class="fas fa-bolt"></i> التحديات النشطة</h3>
+                        <div class="races-list" id="activeRacesList">
+                            <!-- سيتم تعبئته بالجافاسكريبت -->
+                        </div>
+                    </div>
+                    
+                    <div class="race-leaderboard">
+                        <h3><i class="fas fa-trophy"></i> أفضل النتائج</h3>
+                        <div class="leaderboard-list" id="raceLeaderboardList">
+                            <!-- سيتم تعبئته بالجافاسكريبت -->
+                        </div>
+                    </div>
+                    
+                    <div class="race-history">
+                        <h3><i class="fas fa-history"></i> آخر التحديات المكتملة</h3>
+                        <div class="history-list" id="raceHistoryList">
+                            <!-- سيتم تعبئته بالجافاسكريبت -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- لوحة المتصدرين -->
+            <section class="content-section" id="leaderboardSection">
+                <div class="section-header">
+                    <h1><i class="fas fa-chart-line"></i> المتصدرين</h1>
+                    <div class="leaderboard-tabs">
+                        <button class="leaderboard-tab active" data-type="points">أكثر النقاط</button>
+                        <button class="leaderboard-tab" data-type="wins">أكثر الانتصارات</button>
+                        <button class="leaderboard-tab" data-type="activity">الأكثر نشاطاً</button>
+                        <button class="leaderboard-tab" data-type="streak">أطول سلسلة</button>
+                    </div>
+                </div>
+                
+                <div class="leaderboard-container">
+                    <div class="top-three">
+                        <div class="top-player second">
+                            <div class="rank">2</div>
+                            <img src="https://files.catbox.moe/7pcx7j.jpg" alt="الوصيف">
+                            <h4 id="secondPlaceName">الوصيف</h4>
+                            <p class="points" id="secondPlacePoints">0 نقطة</p>
+                        </div>
+                        
+                        <div class="top-player first">
+                            <div class="rank">1</div>
+                            <img src="https://files.catbox.moe/7pcx7j.jpg" alt="البطل">
+                            <h4 id="firstPlaceName">البطل</h4>
+                            <p class="points" id="firstPlacePoints">0 نقطة</p>
+                            <div class="crown">👑</div>
+                        </div>
+                        
+                        <div class="top-player third">
+                            <div class="rank">3</div>
+                            <img src="https://files.catbox.moe/7pcx7j.jpg" alt="المركز الثالث">
+                            <h4 id="thirdPlaceName">المركز الثالث</h4>
+                            <p class="points" id="thirdPlacePoints">0 نقطة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <!-- يتم تعبئته بالجافاسكريبت -->
+                    </div>
+                </div>
+                
+                <div class="user-stats">
+                    <h3><i class="fas fa-user"></i> إحصائياتك</h3>
+                    <div class="stats-grid">
+                        <div class="user-stat">
+                            <i class="fas fa-trophy"></i>
+                            <div>
+                                <span class="stat-label">المركز الحالي</span>
+                                <span class="stat-value" id="userRank">-</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <i class="fas fa-coins"></i>
+                            <div>
+                                <span class="stat-label">النقاط الكلية</span>
+                                <span class="stat-value" id="userTotalPoints">0</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <span class="stat-label">نسبة الفوز</span>
+                                <span class="stat-value" id="userWinRate">0%</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <i class="fas fa-fire"></i>
+                            <div>
+                                <span class="stat-label">أطول سلسلة</span>
+                                <span class="stat-value" id="userBestStreak">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- سجل الجولات -->
+            <section class="content-section" id="historySection">
+                <div class="section-header">
+                    <h1><i class="fas fa-history"></i> سجل الجولات</h1>
+                    <div class="history-filters">
+                        <select id="historyFilterType">
+                            <option value="all">جميع الجولات</option>
+                            <option value="win">الفوز فقط</option>
+                            <option value="loss">الخسارة فقط</option>
+                            <option value="draw">التعادل فقط</option>
+                        </select>
+                        <select id="historyFilterGame">
+                            <option value="all">جميع الألعاب</option>
+                            <option value="darts">رمي السهام</option>
+                            <option value="number">مراهنة رقم</option>
+                            <option value="dice">لعبة النرد</option>
+                            <option value="click-race">سباق النقرات</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="history-stats">
+                    <div class="history-stat">
+                        <span>إجمالي الجولات</span>
+                        <strong id="totalGamesHistory">0</strong>
+                    </div>
+                    <div class="history-stat">
+                        <span>الفوز</span>
+                        <strong id="winGamesHistory">0</strong>
+                    </div>
+                    <div class="history-stat">
+                        <span>الخسارة</span>
+                        <strong id="lossGamesHistory">0</strong>
+                    </div>
+                    <div class="history-stat">
+                        <span>التعادل</span>
+                        <strong id="drawGamesHistory">0</strong>
+                    </div>
+                    <div class="history-stat">
+                        <span>صافي الربح</span>
+                        <strong id="netProfitHistory">0</strong>
+                    </div>
+                </div>
+                
+                <div class="history-list-container">
+                    <div class="history-list" id="gamesHistoryList">
+                        <!-- يتم تعبئته بالجافاسكريبت -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم المساعدة -->
+            <section class="content-section" id="helpSection">
+                <div class="section-header">
+                    <h1><i class="fas fa-question-circle"></i> المساعدة والتعليمات</h1>
+                </div>
+                
+                <div class="help-container">
+                    <div class="help-categories">
+                        <button class="help-category active" data-category="rules">قواعد اللعب</button>
+                        <button class="help-category" data-category="games">شرح الألعاب</button>
+                        <button class="help-category" data-category="points">نظام النقاط</button>
+                        <button class="help-category" data-category="click">سباق النقرات</button>
+                        <button class="help-category" data-category="faq">الأسئلة الشائعة</button>
+                    </div>
+                    
+                    <div class="help-content">
+                        <div class="help-section active" id="rulesSection">
+                            <h3><i class="fas fa-gavel"></i> قواعد اللعب العامة</h3>
+                            <div class="rules-list">
+                                <div class="rule-item">
+                                    <h4>📋 التسجيل والمشاركة</h4>
+                                    <ul>
+                                        <li>يجب أن يكون العضو مسجلاً في موقع العظمة الرئيسي</li>
+                                        <li>الحد الأدنى للعمر هو 13 سنة</li>
+                                        <li>يحق لكل عضو إنشاء حساب واحد فقط</li>
+                                        <li>المسؤولية الكاملة على العضو في حماية بياناته</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="rule-item">
+                                    <h4>💰 نظام الرهانات</h4>
+                                    <ul>
+                                        <li>الحد الأدنى للرهان: 100 نقطة</li>
+                                        <li>الحد الأقصى للرهان: 50,000 نقطة</li>
+                                        <li>معدل الربح: 80% من المبلغ المراهن (الفوز)</li>
+                                        <li>يتم خصم النقاط فور بدء الجولة</li>
+                                        <li>يتم إضافة الأرباح فور انتهاء الجولة</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="rule-item">
+                                    <h4>⚖️ قواعد السلوك</h4>
+                                    <ul>
+                                        <li>يمنع الاحتيال أو التلاعب بنتائج الألعاب</li>
+                                        <li>يمنع إهانة أو مضايقة اللاعبين الآخرين</li>
+                                        <li>يمنع إنشاء تحديات وهمية</li>
+                                        <li>يجب الالتزام بمواعيد التحديات</li>
+                                        <li>أي مخالفة تؤدي إلى حظر مؤقت أو دائم</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section" id="gamesSection">
+                            <h3><i class="fas fa-gamepad"></i> شرح الألعاب</h3>
+                            <div class="game-help">
+                                <h4><i class="fas fa-bullseye"></i> رمي السهام المحسنة</h4>
+                                <p>لعبة مهارة وتحدي تحتاج إلى سرعة ودقة. ظهر دوائر بأحجام مختلفة وتختفي بسرعة. اصطدم بالدوائر قبل أن تختفي!</p>
+                                <ul>
+                                    <li><strong>الدوائر الذهبية:</strong> 150 نقطة - تختفي بسرعة (0.5 ثانية)</li>
+                                    <li><strong>الدوائر الفضية:</strong> 100 نقطة - متوسطة السرعة (0.7 ثانية)</li>
+                                    <li><strong>الدوائر البرونزية:</strong> 50 نقطة - تبقى أطول (0.9 ثانية)</li>
+                                    <li><strong>الهدف:</strong> جمع 1600+ نقطة خلال 15 ثانية</li>
+                                    <li><strong>النقر على الفراغ:</strong> -10 نقاط</li>
+                                </ul>
+                                
+                                <h4><i class="fas fa-hashtag"></i> مراهنة على رقم</h4>
+                                <p>لعبة حظ بسيطة وممتعة. اختر رقم من 1 إلى 10 وانظر إذا كان هو الرقم الفائز!</p>
+                                <ul>
+                                    <li><strong>الربح:</strong> 8 أضعاف الرهان</li>
+                                    <li><strong>الخسارة:</strong> فقدان الرهان</li>
+                                    <li><strong>الاحتمال:</strong> 1 من 10 للفوز</li>
+                                </ul>
+                                
+                                <h4><i class="fas fa-dice"></i> لعبة النرد المحسنة</h4>
+                                <p>تحدي ضد الذكاء الاصطناعي. من سيحصل على أعلى مجموع من رمي النرد؟</p>
+                                <ul>
+                                    <li><strong>3 جولات:</strong> كل جولة رمي نردين</li>
+                                    <li><strong>الفوز:</strong> 80% من الرهان</li>
+                                    <li><strong>3-0:</strong> ربح إضافي 20%</li>
+                                    <li><strong>التعادل:</strong> استرداد المبلغ</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section" id="pointsSection">
+                            <h3><i class="fas fa-coins"></i> نظام النقاط</h3>
+                            <div class="points-help">
+                                <h4><i class="fas fa-wallet"></i> نظام النقاط</h4>
+                                <p>نقاط كازينو العظمة هي نفس نقاط الموقع الرئيسي، مما يعني:</p>
+                                <ul>
+                                    <li>يمكنك استخدام نقاطك في كلا المنصتين</li>
+                                    <li>أرباحك في الكازينو تظهر في رصيدك الرئيسي</li>
+                                    <li>يمكنك تحويل النقاط كما في الموقع الرئيسي</li>
+                                    <li>النقاط لا يمكن تحويلها إلى أموال حقيقية</li>
+                                </ul>
+                                
+                                <h4><i class="fas fa-percentage"></i> معدلات الربح</h4>
+                                <ul>
+                                    <li><strong>الفوز في الألعاب الفردية:</strong> 80% من الرهان</li>
+                                    <li><strong>الفوز في سباق النقرات:</strong> 100% من رهان الخاسر</li>
+                                    <li><strong>مراهنة الرقم الصحيح:</strong> 8 أضعاف الرهان</li>
+                                    <li><strong>التعادل:</strong> استرداد كامل المبلغ</li>
+                                </ul>
+                                
+                                <h4><i class="fas fa-shield-alt"></i> حدود الرهان</h4>
+                                <ul>
+                                    <li><strong>الحد الأدنى:</strong> 100 نقطة</li>
+                                    <li><strong>الحد الأقصى:</strong> 50,000 نقطة</li>
+                                    <li><strong>الحد الأقصى للجولة الواحدة:</strong> 50,000 نقطة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section" id="clickSection">
+                            <h3><i class="fas fa-mouse-pointer"></i> سباق النقرات المحسن</h3>
+                            <div class="challenges-help">
+                                <h4><i class="fas fa-trophy"></i> نظام سباق النقرات الجديد</h4>
+                                <p>تحدي فردي يمكنك لعب تدريب فردي أو تحدي لاعب آخر:</p>
+                                
+                                <h4><i class="fas fa-gamepad"></i> طريقة اللعب الجديدة</h4>
+                                <ul>
+                                    <li><strong>إنشاء التحدي:</strong> اختر مبلغ الرهان (100-50,000 نقطة)</li>
+                                    <li><strong>بدء اللعب فوراً:</strong> يبدأ اللاعب بالنقر خلال 20 ثانية</li>
+                                    <li><strong>التدريب الفردي:</strong> يمكنك التدرب دون رهان</li>
+                                    <li><strong>تحدي لاعب آخر:</strong> يجب قبول التحدي من لاعب آخر</li>
+                                    <li><strong>الفائز:</strong> صاحب أعلى نقاط خلال مدة التحدي</li>
+                                    <li><strong>عدد اللاعبين:</strong> لاعبين فقط في كل تحدي</li>
+                                </ul>
+                                
+                                <h4><i class="fas fa-clock"></i> قواعد التحدي الجديدة</h4>
+                                <ul>
+                                    <li>مدة التحدي: 20 ثانية لكل لاعب</li>
+                                    <li>مدة انتظار القبول: 10 دقائق</li>
+                                    <li>يتم خصم النقاط عند إرسال التحدي</li>
+                                    <li>الفائز يحصل على 100% من رهان الخاسر</li>
+                                    <li>يمكن محاولة تحطيم الرقم القياسي</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section" id="faqSection">
+                            <h3><i class="fas fa-question-circle"></i> الأسئلة الشائعة</h3>
+                            <div class="faq-help">
+                                <div class="faq-item">
+                                    <h5>كيف أحصل على نقاط للعب؟</h5>
+                                    <p>النقاط هي نفسها نقاط الموقع الرئيسي. يمكنك الحصول عليها من:
+                                    <br>• المشاركة في الدردشة
+                                    <br>• إكمال المهام اليومية
+                                    <br>• استخدام أكواد الهدايا
+                                    <br>• الشراء من المتجر</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h5>هل يمكنني سحب نقاطي؟</h5>
+                                    <p>النقاط هي عملة افتراضية للموقع ولا يمكن سحبها كأموال حقيقية.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h5>ما الذي يحدث إذا انقطع الاتصال أثناء المباراة؟</h5>
+                                    <p>إذا انقطع الاتصال، ستحاول النظام إعادة الاتصال تلقائياً.
+                                    <br>إذا فشل الاتصال، سيتم استرداد النقاط للطرفين.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h5>كيف أبلغ عن مشكلة أو مخالفة؟</h5>
+                                    <p>يمكنك التواصل مع المشرف الأول (عبد الأول) مباشرة.</p>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <h5>هل هناك حد للعب اليومي؟</h5>
+                                    <p>لا يوجد حد للعب، ولكن ننصح باللعب المسؤول وعدم المخاطرة بكل النقاط.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- نافذة سباق النقرات المحسنة -->
+        <div class="modal" id="raceModal">
+            <div class="modal-content race-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-mouse-pointer"></i> سباق النقرات</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-players" id="gamePlayers">
+                        <div class="player" id="racePlayer1">
+                            <img src="" alt="">
+                            <h4></h4>
+                            <div class="player-score">0</div>
+                        </div>
+                        
+                        <div class="vs">VS</div>
+                        
+                        <div class="player" id="racePlayer2">
+                            <img src="" alt="">
+                            <h4></h4>
+                            <div class="player-score">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-type-indicator" id="gameTypeIndicator">
+                        <span class="game-type-label" id="gameTypeLabel">تحدي مزدوج</span>
+                    </div>
+                    
+                    <div class="game-area">
+                        <div class="click-race-game" id="clickRaceGame">
+                            <div class="race-timer">
+                                <span>الوقت المتبقي: <strong id="raceTimeLeft">20</strong> ثانية</span>
+                            </div>
+                            
+                            <div class="click-counter">
+                                <span>النقرات: <strong id="playerClickCount">0</strong></span>
+                                <span id="opponentClickLabel" style="display: none;">خصمك: <strong id="opponentClickCount">0</strong></span>
+                            </div>
+                            
+                            <div class="click-button">
+                                <button class="click-btn" id="clickRaceBtn" disabled>
+                                    اضغط!
+                                </button>
+                            </div>
+                            
+                            <div class="race-instructions">
+                                <p id="raceInstructions">انقر على الزر الأحمر بأسرع ما يمكن خلال 20 ثانية!</p>
+                            </div>
+                            
+                            <div class="best-score-display" id="bestScoreDisplay" style="display: none;">
+                                <span>أفضل نتيجة: <strong id="bestScoreValue">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة النتيجة -->
+        <div class="modal" id="resultModal">
+            <div class="modal-content result-modal">
+                <div class="modal-body">
+                    <div class="result-icon">
+                        <i class="fas fa-trophy" id="resultTrophy"></i>
+                        <i class="fas fa-times" id="resultLoss" style="display: none;"></i>
+                        <i class="fas fa-equals" id="resultDraw" style="display: none;"></i>
+                    </div>
+                    
+                    <h2 id="resultTitle"></h2>
+                    <p id="resultMessage"></p>
+                    
+                    <div class="result-details">
+                        <div class="result-stat">
+                            <span>المبلغ المراهن:</span>
+                            <strong id="resultBetAmount"></strong>
+                        </div>
+                        <div class="result-stat">
+                            <span>الربح/الخسارة:</span>
+                            <strong id="resultProfit"></strong>
+                        </div>
+                        <div class="result-stat">
+                            <span>الرصيد الجديد:</span>
+                            <strong id="resultNewBalance"></strong>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="btn btn-primary" id="playAgainBtn">
+                            <i class="fas fa-redo"></i> اللعب مرة أخرى
+                        </button>
+                        <button class="btn btn-secondary close-modal">
+                            <i class="fas fa-home"></i> العودة للرئيسية
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة التأكيد -->
+        <div class="modal" id="confirmModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="confirmTitle"></h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage"></p>
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" id="cancelConfirmBtn">لا</button>
+                        <button class="btn btn-primary" id="okConfirmBtn">نعم</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة التدريب الفردي -->
+        <div class="modal" id="practiceModal">
+            <div class="modal-content practice-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user"></i> التدريب الفردي</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="practice-info">
+                        <h4>تدرب على سرعة نقراتك!</h4>
+                        <p>اضغط على الزر الأحمر بأقصى سرعة خلال 20 ثانية</p>
+                        <p>أفضل نتيجة: <strong id="practiceBestScore">0</strong> نقرة</p>
+                    </div>
+                    
+                    <div class="practice-game">
+                        <div class="race-timer">
+                            <span>الوقت المتبقي: <strong id="practiceTimer">20</strong> ثانية</span>
+                        </div>
+                        
+                        <div class="click-counter">
+                            <span>النقرات: <strong id="practiceClickCount">0</strong></span>
+                        </div>
+                        
+                        <div class="click-button">
+                            <button class="click-btn" id="practiceClickBtn" disabled>
+                                اضغط!
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="practice-actions">
+                        <button class="btn btn-primary" id="practiceStartBtn">
+                            <i class="fas fa-play"></i> بدء التدريب
+                        </button>
+                        <button class="btn btn-secondary close-modal">
+                            <i class="fas fa-times"></i> إلغاء
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إضافة Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- ملفات التكامل مع الموقع الرئيسي -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
